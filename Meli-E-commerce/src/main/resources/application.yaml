@@ -1,1 +1,5 @@
-spring.application.name=Meli-E-commerce
+spring:
+  application:
+    name: Meli-E-commerce
+  profiles:
+    active: prod
