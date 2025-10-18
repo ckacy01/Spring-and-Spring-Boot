@@ -34,11 +34,7 @@ public class OrderService {
     public Order createOrder(Long userId, List<OrderDetailsDTO> detailsRequest) {
         log.info("Creating order for user {}", userId);
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> {
-                    log.error("User not found with id {}", userId);
-                    return new ResourceNotFoundException("User" , "id", userId);
-                });
+        User user =  validateUserId(userId);
 
         Order order = new Order();
         order.setUser(user);
@@ -92,15 +88,27 @@ public class OrderService {
 
     public List<Order> getOrdersByUserIdActive(Long userId) {
         log.info("Retrieving active orders for user with id: {}", userId);
-        List<Order> orders = orderRepository.findByUser_IdAndActiveTrue(userId);
-        log.info("Retrieved {} active orders for user: {}", orders.size(), userId);
+        User user =  validateUserId(userId);
+        List<Order> orders = orderRepository.findByUser_IdAndActiveTrue(user.getId());
+
+        if(orders.isEmpty()) {
+            log.warn("Not actives orders found for user with id: {}", userId);
+        }
+
+        log.info("Retrieved {} active orders for user: {}", orders.size(), user.getId());
         return orders;
     }
 
-    public List<Order> getOrdersByUserId(long id){
-        log.info("Retrieving all orders for user with id: {}", id);
-        List<Order> orders = orderRepository.findByUserId(id);
-        log.info("Retrieved {} orders for user: {}", orders.size(), id);
+    public List<Order> getOrdersByUserId(Long userId){
+        log.info("Retrieving all orders for user with id: {}", userId);
+        validateUserId(userId);
+        List<Order> orders = orderRepository.findByUserId(userId);
+
+        if(orders.isEmpty()) {
+            log.warn("Not actives orders found for user with id: {}", userId);
+        }
+
+        log.info("Retrieved {} orders for user: {}", orders.size(), userId);
         return orders;
     }
 
@@ -173,6 +181,19 @@ public class OrderService {
 
         return MapperUtil.toDTO(updatedOrder);
     }
+
+    public User validateUserId(Long userId) {
+        log.info("Validating user with id {}", userId);
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> {
+                    log.error("User not found with id {}", userId);
+                    return new ResourceNotFoundException("User", "id", userId);
+                });
+
+        return user;
+    }
+
 
 
 }
