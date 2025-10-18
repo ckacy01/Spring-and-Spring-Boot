@@ -2,6 +2,7 @@ package org.technoready.meliecommerce.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.technoready.meliecommerce.dto.OrderDetailsDTO;
 import org.technoready.meliecommerce.dto.OrderResponseDTO;
@@ -9,6 +10,8 @@ import org.technoready.meliecommerce.entity.Order;
 import org.technoready.meliecommerce.entity.OrderDetails;
 import org.technoready.meliecommerce.entity.Product;
 import org.technoready.meliecommerce.entity.User;
+import org.technoready.meliecommerce.exception.InactiveResourceException;
+import org.technoready.meliecommerce.exception.ResourceNotFoundException;
 import org.technoready.meliecommerce.repository.OrderRepository;
 import org.technoready.meliecommerce.repository.ProductRepository;
 import org.technoready.meliecommerce.repository.UserRepository;
@@ -18,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -28,8 +32,13 @@ public class OrderService {
 
     @Transactional
     public Order createOrder(Long userId, List<OrderDetailsDTO> detailsRequest) {
+        log.info("Creating order for user {}", userId);
+
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> {
+                    log.error("User not found with id {}", userId);
+                    return new ResourceNotFoundException("User" , "id", userId);
+                });
 
         Order order = new Order();
         order.setUser(user);
@@ -39,7 +48,10 @@ public class OrderService {
 
         for (OrderDetailsDTO detailReq : detailsRequest) {
             Product product = productRepository.findById(detailReq.getProductId())
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
+                    .orElseThrow(() -> {
+                        log.error("Product not found with id: {}", detailReq.getProductId());
+                        return new ResourceNotFoundException("Product", "id", detailReq.getProductId());
+                    });
 
             OrderDetails detail = new OrderDetails();
             detail.setOrder(order);
@@ -56,44 +68,77 @@ public class OrderService {
         order.setDetails(details);
         order.setTotal(total);
 
-        return orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+        log.info("Order created with id {}", savedOrder.getId());
+
+        return savedOrder;
     }
 
     public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+        log.info("Getting all orders");
+        List<Order> orders = orderRepository.findAll();
+        log.info("Getting {} orders", orders.size());
+        return orders;
     }
 
     public Optional<Order> getOrderById(Long id) {
-        return orderRepository.findById(id);
+        log.info("Retrieving order with id: {}", id);
+        Optional<Order> order = orderRepository.findById(id);
+        if (order.isEmpty()) {
+            log.warn("Order not found with id: {}", id);
+        }
+        return order;
     }
 
     public List<Order> getOrdersByUserIdActive(Long userId) {
-        return orderRepository.findByUser_IdAndActiveTrue(userId);
+        log.info("Retrieving active orders for user with id: {}", userId);
+        List<Order> orders = orderRepository.findByUser_IdAndActiveTrue(userId);
+        log.info("Retrieved {} active orders for user: {}", orders.size(), userId);
+        return orders;
     }
 
     public List<Order> getOrdersByUserId(long id){
-        return orderRepository.findByUserId(id);
+        log.info("Retrieving all orders for user with id: {}", id);
+        List<Order> orders = orderRepository.findByUserId(id);
+        log.info("Retrieved {} orders for user: {}", orders.size(), id);
+        return orders;
     }
 
     public void deleteOrder(Long id) {
+        log.info("Attempting to delete order with id: {}", id);
+
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> {
+                    log.error("Cannot delete - Order not found with id: {}", id);
+                    return new ResourceNotFoundException("Order", "id", id);
+                });
+
         order.setActive(false);
         orderRepository.save(order);
+        log.info("Order with id: {} has been successfully deactivated", id);
     }
 
     public List<Order> getAllActiveOrders() {
-        return orderRepository.findOrdersByActiveTrue();
+        log.info("Retrieving all active orders");
+        List<Order> orders = orderRepository.findOrdersByActiveTrue();
+        log.info("Retrieved {} active orders", orders.size());
+        return orders;
     }
 
 
     @Transactional
     public OrderResponseDTO updateOrder(Long id, List<OrderDetailsDTO> orderDetailsDTO) {
+        log.info("Attempting to update order with id: {}", id);
+
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> {
+                    log.error("Cannot update - Order not found with id: {}", id);
+                    return new ResourceNotFoundException("Order", "id", id);
+                });
 
         if (!order.isActive()) {
-            throw new RuntimeException("Cannot update an inactive order");
+            log.error("Cannot update inactive order with id: {}", id);
+            throw new InactiveResourceException("Order", id);
         }
 
         order.getDetails().clear();
@@ -103,7 +148,10 @@ public class OrderService {
 
         for (OrderDetailsDTO detailReq : orderDetailsDTO) {
             Product product = productRepository.findById(detailReq.getProductId())
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
+                    .orElseThrow(() -> {
+                        log.error("Product not found with id: {}", detailReq.getProductId());
+                        return new ResourceNotFoundException("Product", "id", detailReq.getProductId());
+                    });
 
             OrderDetails detail = new OrderDetails();
             detail.setOrder(order);
@@ -119,8 +167,11 @@ public class OrderService {
 
         order.setDetails(updatedDetails);
         order.setTotal(total);
-        Order order1 = orderRepository.save(order);
-        return MapperUtil.toDTO(order1);
+        Order updatedOrder = orderRepository.save(order);
+
+        log.info("Order with id: {} has been successfully updated", id);
+
+        return MapperUtil.toDTO(updatedOrder);
     }
 
 
