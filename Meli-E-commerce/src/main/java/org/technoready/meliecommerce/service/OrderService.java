@@ -185,13 +185,11 @@ public class OrderService {
     public User validateUserId(Long userId) {
         log.info("Validating user with id {}", userId);
 
-        User user = userRepository.findById(userId)
+        return userRepository.findById(userId)
                 .orElseThrow(() -> {
                     log.error("User not found with id {}", userId);
                     return new ResourceNotFoundException("User", "id", userId);
                 });
-
-        return user;
     }
 
 

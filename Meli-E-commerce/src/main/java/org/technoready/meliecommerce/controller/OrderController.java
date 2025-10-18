@@ -74,7 +74,7 @@ public class OrderController {
             @RequestParam(required = false, defaultValue = "true") boolean activeOnly) {
 
         String message;
-        SuccessResponseDTO<List<OrderResponseDTO>> response = new SuccessResponseDTO<>();
+        SuccessResponseDTO<List<OrderResponseDTO>> response;
 
         log.info("Controller: Received request to get orders for user {} (activeOnly: {})", userId, activeOnly);
 
