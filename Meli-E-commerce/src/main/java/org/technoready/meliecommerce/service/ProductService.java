@@ -2,7 +2,6 @@ package org.technoready.meliecommerce.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.technoready.meliecommerce.entity.Product;
 import org.technoready.meliecommerce.exception.ResourceNotFoundException;
