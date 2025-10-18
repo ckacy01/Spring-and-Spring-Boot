@@ -8,6 +8,8 @@ import org.technoready.meliecommerce.entity.Order;
 import org.technoready.meliecommerce.entity.Product;
 import org.technoready.meliecommerce.entity.User;
 
+import java.util.List;
+
 public class MapperUtil {
 
     public static ProductDTO toDTO(Product entity){
@@ -60,6 +62,7 @@ public class MapperUtil {
                 .userId(order.getUser().getId())
                 .createdAt(order.getCreatedAt())
                 .total(order.getTotal())
+                .active(order.isActive())
                 .details(order.getDetails().stream()
                         .map(d -> OrderDetailsResponseDTO.builder()
                                 .productId(d.getProduct().getId())
@@ -71,4 +74,11 @@ public class MapperUtil {
                         .toList())
                 .build();
     }
+
+    public static List<OrderResponseDTO> toDTOList(List<Order> orders) {
+        return orders.stream()
+                .map(MapperUtil::toDTO)
+                .toList();
+    }
+
 }
