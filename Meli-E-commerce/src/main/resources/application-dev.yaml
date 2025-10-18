@@ -28,5 +28,8 @@ spring:
 
   logging:
     level:
-      org.springframework: info
-      com.example.ecommerce: debug
+      root: DEBUG
+      org.technoready.meliecommerce: DEBUG
+      org.springframework.web: DEBUG
+      org.hibernate.SQL: DEBUG
+      org.hibernate.type.descriptor.sql.BasicBinder: TRACE
