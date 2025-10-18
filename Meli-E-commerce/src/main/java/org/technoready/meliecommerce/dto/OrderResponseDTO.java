@@ -14,4 +14,5 @@ public class OrderResponseDTO {
     private LocalDateTime createdAt;
     private double total;
     private List<OrderDetailsResponseDTO> details;
+    private boolean active;
 }
