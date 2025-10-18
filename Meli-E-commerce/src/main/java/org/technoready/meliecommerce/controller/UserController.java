@@ -16,16 +16,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public List<User> findAllIsActive()
+    @GetMapping()
+    public List<User> findAll( @RequestParam(required = false) boolean activeOnly)
     {
-        return userService.findAllIsActive();
-    }
-
-    @GetMapping("/all")
-    public List<User> findAll()
-    {
-        return userService.findAll();
+        if(activeOnly)
+            return userService.findAllIsActive();
+         return userService.findAll();
     }
 
     @GetMapping("/{id}")
