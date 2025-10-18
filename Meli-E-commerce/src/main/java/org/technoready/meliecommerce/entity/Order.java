@@ -35,4 +35,7 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderDetails> details;
 
+    @Column(nullable = false)
+    private boolean active = true;
+
 }
