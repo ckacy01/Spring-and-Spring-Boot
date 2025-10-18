@@ -16,13 +16,10 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public List<Product> findAllByIsActiveTrue() {
-        return productService.findAllByIsActiveTrue();
-    }
-
-    @GetMapping("/all")
-    public List<Product> findAll() {
-        return productService.findAll();
+    public List<Product> findAll(@RequestParam(required = false, defaultValue = "true") boolean activeOnly) {
+        if(activeOnly)
+            return productService.findAllByIsActiveTrue();
+    return productService.findAll();
     }
 
     @GetMapping("/{id}")
