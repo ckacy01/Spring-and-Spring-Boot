@@ -12,30 +12,63 @@ import org.technoready.meliecommerce.util.MapperUtil;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/order")
+@RequestMapping("/api/orders")
 @RequiredArgsConstructor
 public class OrderController {
 
-        private final OrderService orderService;
+    private final OrderService orderService;
 
-        @PostMapping("/{userId}")
-        public ResponseEntity<OrderResponseDTO> createOrder(
-                @PathVariable Long userId,
-                @RequestBody List<OrderDetailsDTO> detailsRequest) {
-            Order order = orderService.createOrder(userId, detailsRequest);
-            return ResponseEntity.ok(MapperUtil.toDTO(order));
-        }
+    @PostMapping("/{userId}")
+    public ResponseEntity<OrderResponseDTO> createOrder(
+            @PathVariable Long userId,
+            @RequestBody List<OrderDetailsDTO> detailsRequest) {
 
-        @GetMapping
-        public ResponseEntity<List<Order>> getAllOrders() {
-            return ResponseEntity.ok(orderService.getAllOrders());
-        }
+        Order order = orderService.createOrder(userId, detailsRequest);
+        return ResponseEntity.ok(MapperUtil.toDTO(order));
+    }
 
-        @GetMapping("/{id}")
-        public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
-            return orderService.getOrderById(id)
-                    .map(ResponseEntity::ok)
-                    .orElse(ResponseEntity.notFound().build());
-        }
+    @GetMapping
+    public ResponseEntity<List<OrderResponseDTO>> getOrders(
+            @RequestParam(required = false, defaultValue = "true") boolean activeOnly) {
+
+        List<Order> orders = activeOnly
+                ? orderService.getAllActiveOrders()
+                : orderService.getAllOrders();
+
+        return ResponseEntity.ok(MapperUtil.toDTOList(orders));
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<OrderResponseDTO>> getOrdersByUser(
+            @PathVariable Long userId,
+            @RequestParam(required = false, defaultValue = "true") boolean activeOnly) {
+
+        List<Order> orders = activeOnly
+                ? orderService.getOrdersByUserIdActive(userId)
+                : orderService.getOrdersByUserId(userId);
+
+        return ResponseEntity.ok(MapperUtil.toDTOList(orders));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderResponseDTO> getOrderById(@PathVariable Long id) {
+        return orderService.getOrderById(id)
+                .map(order -> ResponseEntity.ok(MapperUtil.toDTO(order)))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
+        orderService.deleteOrder(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderResponseDTO> updateOrder(
+            @PathVariable Long id,
+            @RequestBody List<OrderDetailsDTO> detailsRequest) {
+
+        OrderResponseDTO updatedOrder = orderService.updateOrder(id, detailsRequest);
+        return ResponseEntity.ok(updatedOrder);
+    }
 }
-
