@@ -1,6 +1,7 @@
 package org.technoready.meliecommerce.config;
 
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,13 +14,12 @@ import java.util.List;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class DataInitializer {
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @PostConstruct
     public void initData() {
