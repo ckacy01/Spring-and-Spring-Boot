@@ -54,11 +54,9 @@ This project represents the successful transformation of a problematic system in
 - [Usage](#usage)
 - [Documentation](#documentation)
 - [Testing](#testing)
-- [Architecture](#architecture)
-- [Contributing](#contributing)
 - [License](#license)
 
-## ✨ Features
+## Features
 
 ### Core Functionality
 - **User Management**: Full CRUD operations for user profiles
@@ -78,7 +76,7 @@ This project represents the successful transformation of a problematic system in
 - **ORM Support**: Hibernate-based object-relational mapping
 - **Logging**: Lombok-powered efficient logging throughout the application
 
-## 📦 Release Notes
+## Release Notes
 
 ### Version 1.0.0 - Initial Release (October 19, 2025)
 
@@ -111,7 +109,7 @@ This project represents the successful transformation of a problematic system in
 - JUnit 5
 - Swagger/Springdoc
 
-## 📋 Requirements
+## Requirements
 
 ### System Requirements
 - **Java**: 17 or higher
@@ -127,7 +125,7 @@ This project represents the successful transformation of a problematic system in
 - **Git Bash**: For running deployment scripts (Windows users)
 - **Docker**: For containerized deployment (optional)
 
-## 🚀 Installation
+## Installation
 
 ### Option 1: Automated Installation & Run
 
@@ -205,7 +203,7 @@ spring:
 
 This runs the application with the testing profile using H2 database.
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 meliecommerce/
@@ -249,7 +247,7 @@ meliecommerce/
 └── .gitignore
 ```
 
-## ⚙️ Configuration
+## Configuration
 
 ### Environment Profiles
 
@@ -307,7 +305,7 @@ spring:
 - **DDL**: Validate (no automatic schema changes)
 - **Credentials**: Use environment variables for security
 
-## 📖 Usage
+## Usage
 
 ### Example API Requests
 
@@ -353,7 +351,7 @@ curl -X DELETE http://localhost:8080/api/user/1
 
 For complete API documentation, see [API.md](Meli-E-commerce/docs/more-info/API.md)
 
-## 📚 Documentation
+## Documentation
 
 This project includes comprehensive documentation:
 
@@ -384,7 +382,7 @@ Generate or update JavaDoc:
 mvn javadoc:javadoc
 ```
 
-## 🧪 Testing
+## Testing
 
 ### API Testing with Postman
 
@@ -401,17 +399,17 @@ Test coverage areas:
 - Error handling scenarios
 - Edge cases and validations
 
-## 📝 License
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 📧 Contact & Support
+## Contact & Support
 
 - **Project Lead**: Jorge Armando Avila Carrillo
 - **Issues**: [GitHub Issues](https://github.com/ckacy01/Spring-and-Spring-Boot/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/ckacy01/Spring-and-Spring-Boot/discussions)
 
-## 🎯 Roadmap
+## Roadmap
 
 - [ ] Add JUNIT 5 testing
 - [ ] Add Testing environment
@@ -419,7 +417,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [ ] Configure Swagger UI for interactive testing
 - [ ] Develop tests for different scenarios ( success, edge cases. failure)
 
-## 📌 Changelog
+## Changelog
 
 **v1.0.0** - Initial release with core features (October 19, 2025)
 
