@@ -1,0 +1,9 @@
+org.technoready.meliecommerce
+org.technoready.meliecommerce.config
+org.technoready.meliecommerce.controller
+org.technoready.meliecommerce.dto
+org.technoready.meliecommerce.entity
+org.technoready.meliecommerce.exception
+org.technoready.meliecommerce.repository
+org.technoready.meliecommerce.service
+org.technoready.meliecommerce.util
