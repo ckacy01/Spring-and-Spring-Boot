@@ -3,7 +3,6 @@ package org.technoready.meliecommerce.config;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.technoready.meliecommerce.entity.Product;
 import org.technoready.meliecommerce.entity.User;
