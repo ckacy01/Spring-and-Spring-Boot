@@ -91,6 +91,7 @@ This project represents the successful transformation of a problematic system in
 - ✅ Global exception handling with custom exceptions
 - ✅ JavaDoc code documentation
 - ✅ Bash scripts for easy deployment
+- ✅ Logging (This application generate logs, to debug)
 
 #### Improvements
 - Optimized query performance with Spring Data JPA
