@@ -369,7 +369,7 @@ This project includes comprehensive documentation:
 - Entity diagrams
 
 ### Scripts Documentation
-**File**: [DATABASE.md](Meli-E-commerce/docs/more-info/SCRIPTS.md)
+**File**: [SCRIPTS.md](Meli-E-commerce/docs/more-info/SCRIPTS.md)
 
 
 ### Code Documentation
@@ -430,3 +430,5 @@ For more detailed information, please refer to:
 - [Architecture Documentation](Meli-E-commerce/docs/more-info/ARCHITECTURE.md)
 - [API Endpoints](Meli-E-commerce/docs/more-info/API.md)
 - [ Java Doc ](Meli-E-commerce/docs/javadoc)
+- [Scripts Documentation & Ussage](Meli-E-commerce/docs/more-info/SCRIPTS.md)
+
