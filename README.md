@@ -368,6 +368,10 @@ This project includes comprehensive documentation:
 - Product snapshot mechanism
 - Entity diagrams
 
+### Scripts Documentation
+**File**: [DATABASE.md](Meli-E-commerce/docs/more-info/SCRIPTS.md)
+
+
 ### Code Documentation
 **Location**: `docs/javadoc/`
 - Complete JavaDoc for all classes
