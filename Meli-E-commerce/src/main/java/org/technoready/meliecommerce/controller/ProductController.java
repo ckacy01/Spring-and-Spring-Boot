@@ -7,9 +7,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.technoready.meliecommerce.dto.SuccessResponseDTO;
 import org.technoready.meliecommerce.entity.Product;
+import org.technoready.meliecommerce.exception.ResourceNotFoundException;
 import org.technoready.meliecommerce.service.ProductService;
 
 import java.util.List;
+
+/**
+ * REST Controller that manages product-related operations.
+ * Provides endpoints for retrieving, creating, updating, and deleting products.
+ * DATE: 19 - October - 2025
+ *
+ * @author Jorge Armando Avila Carrillo | NAOID: 3310
+ * @version 1.0
+ */
 
 @RestController
 @RequestMapping("/api/products")
@@ -18,6 +28,13 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+
+    /**
+     * Retrieves all products or only active products based on the activeOnly parameter.
+     *
+     * @param activeOnly boolean - Flag to retrieve only active products (default: true)
+     * @return ResponseEntity with SuccessResponseDTO containing list of Products
+     */
 
     @GetMapping
     public ResponseEntity<SuccessResponseDTO<List<Product>>> findAll(
@@ -43,6 +60,13 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Retrieves a specific product by its ID.
+     *
+     * @param id long - The ID of the product to retrieve
+     * @return ResponseEntity with SuccessResponseDTO containing the Product
+     * @throws ResourceNotFoundException if the product is not found
+     */
     @GetMapping("/{id}")
     public ResponseEntity<SuccessResponseDTO<Product>> findById(@PathVariable long id) {
         log.info("Controller: Received request to get product {}", id);
@@ -59,6 +83,13 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Soft deletes (deactivates) a product by its ID.
+     *
+     * @param id Long - The ID of the product to delete
+     * @return ResponseEntity with SuccessResponseDTO indicating successful deactivation
+     * @throws ResourceNotFoundException if the product is not found
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<SuccessResponseDTO<Void>> delete(@PathVariable Long id) {
         log.info("Controller: Received request to delete product {}", id);
@@ -74,6 +105,12 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Creates a new product with the provided details.
+     *
+     * @param product Product - The product object to be created
+     * @return ResponseEntity with SuccessResponseDTO containing the created Product
+     */
     @PostMapping
     public ResponseEntity<SuccessResponseDTO<Product>> save(@RequestBody Product product) {
         log.info("Controller: Received request to create product {}", product.getName());
@@ -91,6 +128,14 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    /**
+     * Updates an existing product with new details.
+     *
+     * @param id Long - The ID of the product to update
+     * @param product Product - The product object with updated information
+     * @return ResponseEntity with SuccessResponseDTO containing the updated Product
+     * @throws ResourceNotFoundException if the product is not found
+     */
     @PutMapping("/{id}")
     public ResponseEntity<SuccessResponseDTO<Product>> update(
             @PathVariable Long id,

@@ -10,6 +10,14 @@ import org.technoready.meliecommerce.repository.ProductRepository;
 import org.technoready.meliecommerce.repository.UserRepository;
 
 import java.util.List;
+/**
+ * Configuration class responsible for initializing database with default data.
+ * Automatically creates sample products and users on application startup if the database is empty.
+ * DATE: 19 - October - 2025
+ *
+ * @author Jorge Armando Avila Carrillo | NAOID: 3310
+ * @version 1.0
+ */
 
 @Slf4j
 @Component

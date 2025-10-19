@@ -7,10 +7,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.technoready.meliecommerce.dto.SuccessResponseDTO;
 import org.technoready.meliecommerce.entity.User;
+import org.technoready.meliecommerce.exception.ResourceNotFoundException;
 import org.technoready.meliecommerce.service.UserService;
 
 import java.util.List;
 
+/**
+ * REST Controller that manages user-related operations.
+ * Provides endpoints for retrieving, creating, updating, and deleting users.
+ * DATE: 19 - October - 2025
+ *
+ * @author Jorge Armando Avila Carrillo | NAOID: 3310
+ * @version 1.0
+ */
 
 @RestController
 @RequestMapping("/api/user")
@@ -20,6 +29,12 @@ public class UserController {
 
     private final UserService userService;
 
+    /**
+     * Retrieves all users or only active users based on the activeOnly parameter.
+     *
+     * @param activeOnly boolean - Flag to retrieve only active users (default: false)
+     * @return ResponseEntity with SuccessResponseDTO containing list of Users
+     */
     @GetMapping
     public ResponseEntity<SuccessResponseDTO<List<User>>> findAll(
             @RequestParam(required = false, defaultValue = "false") boolean activeOnly) {
@@ -44,6 +59,13 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Retrieves a specific user by their ID.
+     *
+     * @param id Long - The ID of the user to retrieve
+     * @return ResponseEntity with SuccessResponseDTO containing the User
+     * @throws ResourceNotFoundException if the user is not found
+     */
     @GetMapping("/{id}")
     public ResponseEntity<SuccessResponseDTO<User>> findById(@PathVariable Long id) {
         log.info("Controller: Received request to get user {}", id);
@@ -60,6 +82,12 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Creates a new user with the provided information.
+     *
+     * @param user User - The user object to be created
+     * @return ResponseEntity with SuccessResponseDTO containing the created User
+     */
     @PostMapping
     public ResponseEntity<SuccessResponseDTO<User>> save(@RequestBody User user) {
         log.info("Controller: Received request to create user {}", user.getEmail());
@@ -77,7 +105,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-
+    /**
+     * Soft deletes (deactivates) a user by their ID.
+     *
+     * @param id long - The ID of the user to delete
+     * @return ResponseEntity with SuccessResponseDTO indicating successful deactivation
+     * @throws ResourceNotFoundException if the user is not found
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<SuccessResponseDTO<Void>> delete(@PathVariable long id) {
         log.info("Controller: Received request to delete user {}", id);
@@ -93,7 +127,14 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-
+    /**
+     * Updates an existing user with new information.
+     *
+     * @param user User - The user object with updated information
+     * @param id long - The ID of the user to update
+     * @return ResponseEntity with SuccessResponseDTO containing the updated User
+     * @throws ResourceNotFoundException if the user is not found
+     */
     @PutMapping("/{id}")
     public ResponseEntity<SuccessResponseDTO<User>> update(
             @RequestBody User user,

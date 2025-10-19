@@ -21,6 +21,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service class that handles business logic for order operations.
+ * Manages order creation, retrieval, updating, and deletion with transaction support.
+ * DATE: 19 - October - 2025
+ *
+ * @author Jorge Armando Avila Carrillo | NAOID: 3310
+ * @version 1.0
+ */
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -30,6 +39,16 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
 
+
+    /**
+     * Creates a new order for the specified user with the provided order details.
+     * Calculates the total price based on product prices and quantities.
+     *
+     * @param userId Long - The ID of the user creating the order
+     * @param detailsRequest List<OrderDetailsDTO> - Details of products and quantities to order
+     * @return Order - The created order entity
+     * @throws ResourceNotFoundException if user or product is not found
+     */
     @Transactional
     public Order createOrder(Long userId, List<OrderDetailsDTO> detailsRequest) {
         log.info("Creating order for user {}", userId);
@@ -70,6 +89,11 @@ public class OrderService {
         return savedOrder;
     }
 
+    /**
+     * Retrieves all orders from the database.
+     *
+     * @return List<Order> - List of all orders
+     */
     public List<Order> getAllOrders() {
         log.info("Getting all orders");
         List<Order> orders = orderRepository.findAll();
@@ -77,6 +101,12 @@ public class OrderService {
         return orders;
     }
 
+    /**
+     * Retrieves a specific order by its ID.
+     *
+     * @param id Long - The ID of the order
+     * @return Optional<Order> - The order if found, empty otherwise
+     */
     public Optional<Order> getOrderById(Long id) {
         log.info("Retrieving order with id: {}", id);
         Optional<Order> order = orderRepository.findById(id);
@@ -86,6 +116,13 @@ public class OrderService {
         return order;
     }
 
+    /**
+     * Retrieves all active orders for a specific user.
+     *
+     * @param userId Long - The ID of the user
+     * @return List<Order> - List of active orders for the user
+     * @throws ResourceNotFoundException if user is not found
+     */
     public List<Order> getOrdersByUserIdActive(Long userId) {
         log.info("Retrieving active orders for user with id: {}", userId);
         User user =  validateUserId(userId);
@@ -99,6 +136,13 @@ public class OrderService {
         return orders;
     }
 
+    /**
+     * Retrieves all orders (active and inactive) for a specific user.
+     *
+     * @param userId Long - The ID of the user
+     * @return List<Order> - List of all orders for the user
+     * @throws ResourceNotFoundException if user is not found
+     */
     public List<Order> getOrdersByUserId(Long userId){
         log.info("Retrieving all orders for user with id: {}", userId);
         validateUserId(userId);
@@ -112,6 +156,12 @@ public class OrderService {
         return orders;
     }
 
+    /**
+     * Soft deletes an order by deactivating it.
+     *
+     * @param id Long - The ID of the order to delete
+     * @throws ResourceNotFoundException if order is not found
+     */
     public void deleteOrder(Long id) {
         log.info("Attempting to delete order with id: {}", id);
 
@@ -126,6 +176,11 @@ public class OrderService {
         log.info("Order with id: {} has been successfully deactivated", id);
     }
 
+    /**
+     * Retrieves all active orders from the database.
+     *
+     * @return List<Order> - List of active orders
+     */
     public List<Order> getAllActiveOrders() {
         log.info("Retrieving all active orders");
         List<Order> orders = orderRepository.findOrdersByActiveTrue();
@@ -133,7 +188,16 @@ public class OrderService {
         return orders;
     }
 
-
+    /**
+     * Updates an existing order with new order details.
+     * Clears existing details and replaces them with new ones, recalculating the total.
+     *
+     * @param id Long - The ID of the order to update
+     * @param orderDetailsDTO List<OrderDetailsDTO> - New order details
+     * @return OrderResponseDTO - The updated order data transfer object
+     * @throws ResourceNotFoundException if order or product is not found
+     * @throws InactiveResourceException if the order is inactive
+     */
     @Transactional
     public OrderResponseDTO updateOrder(Long id, List<OrderDetailsDTO> orderDetailsDTO) {
         log.info("Attempting to update order with id: {}", id);
@@ -182,6 +246,13 @@ public class OrderService {
         return MapperUtil.toDTO(updatedOrder);
     }
 
+    /**
+     * Validates that a user exists in the database.
+     *
+     * @param userId Long - The ID of the user to validate
+     * @return User - The validated user entity
+     * @throws ResourceNotFoundException if user is not found
+     */
     public User validateUserId(Long userId) {
         log.info("Validating user with id {}", userId);
 

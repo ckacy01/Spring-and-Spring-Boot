@@ -14,9 +14,19 @@ import org.technoready.meliecommerce.dto.ErrorResponseDTO;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Global exception handler that manages all exceptions thrown in REST controllers.
+ * Provides consistent error response formatting across the application.
+ * DATE: 19 - October - 2025
+ *
+ * @author Jorge Armando Avila Carrillo | NAOID: 3310
+ * @version 1.0
+ */
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    // Methods handle: ResourceNotFoundException, InactiveResourceException,
+    // MethodArgumentNotValidException, MethodArgumentTypeMismatchException, General Exceptions
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handleResourceNotFoundException(

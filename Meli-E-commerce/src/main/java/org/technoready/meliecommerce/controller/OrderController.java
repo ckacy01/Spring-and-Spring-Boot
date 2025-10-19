@@ -9,11 +9,22 @@ import org.technoready.meliecommerce.dto.OrderDetailsDTO;
 import org.technoready.meliecommerce.dto.OrderResponseDTO;
 import org.technoready.meliecommerce.dto.SuccessResponseDTO;
 import org.technoready.meliecommerce.entity.Order;
+import org.technoready.meliecommerce.exception.InactiveResourceException;
 import org.technoready.meliecommerce.exception.ResourceNotFoundException;
 import org.technoready.meliecommerce.service.OrderService;
 import org.technoready.meliecommerce.util.MapperUtil;
 
 import java.util.List;
+
+/**
+ * REST Controller that manages order-related operations.
+ * Provides endpoints for creating, retrieving, updating, and deleting orders.
+ * Handles order processing for users with their associated products.
+ * DATE: 19 - October - 2025
+ *
+ * @author Jorge Armando Avila Carrillo | NAOID: 3310
+ * @version 1.0
+ */
 
 @RestController
 @RequestMapping("/api/orders")
@@ -22,6 +33,14 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+
+    /**
+     * Creates a new order for a specific user with the provided order details.
+     *
+     * @param userId Long - The ID of the user who is creating the order
+     * @param detailsRequest List<OrderDetailsDTO> - List of order details containing product ID and quantity
+     * @return ResponseEntity with SuccessResponseDTO containing the created OrderResponseDTO
+     */
 
     @PostMapping("/{userId}")
     public ResponseEntity<SuccessResponseDTO<OrderResponseDTO>> createOrder(
@@ -42,6 +61,12 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    /**
+     * Retrieves all orders or only active orders based on the activeOnly parameter.
+     *
+     * @param activeOnly boolean - Flag to retrieve only active orders (default: true)
+     * @return ResponseEntity with SuccessResponseDTO containing list of OrderResponseDTOs
+     */
     @GetMapping
     public ResponseEntity<SuccessResponseDTO<List<OrderResponseDTO>>> getOrders(
             @RequestParam(required = false, defaultValue = "true") boolean activeOnly) {
@@ -68,6 +93,13 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Retrieves all orders belonging to a specific user.
+     *
+     * @param userId Long - The ID of the user
+     * @param activeOnly boolean - Flag to retrieve only active orders (default: true)
+     * @return ResponseEntity with SuccessResponseDTO containing list of OrderResponseDTOs
+     */
     @GetMapping("/user/{userId}")
     public ResponseEntity<SuccessResponseDTO<List<OrderResponseDTO>>> getOrdersByUser(
             @PathVariable Long userId,
@@ -94,6 +126,13 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Retrieves a specific order by its ID.
+     *
+     * @param id Long - The ID of the order to retrieve
+     * @return ResponseEntity with SuccessResponseDTO containing the OrderResponseDTO
+     * @throws ResourceNotFoundException if the order is not found
+     */
     @GetMapping("/{id}")
     public ResponseEntity<SuccessResponseDTO<OrderResponseDTO>> getOrderById(@PathVariable Long id) {
         log.info("Controller: Received request to get order {}", id);
@@ -116,6 +155,14 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Soft deletes (deactivates) an order by its ID.
+     *
+     * @param id Long - The ID of the order to delete
+     * @return ResponseEntity with SuccessResponseDTO indicating successful deactivation
+     * @throws ResourceNotFoundException if the order is not found
+     */
+
     @DeleteMapping("/{id}")
     public ResponseEntity<SuccessResponseDTO<Void>> deleteOrder(@PathVariable Long id) {
         log.info("Controller: Received request to delete order {}", id);
@@ -131,6 +178,15 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Updates an existing order with new order details.
+     *
+     * @param id Long - The ID of the order to update
+     * @param detailsRequest List<OrderDetailsDTO> - New list of order details
+     * @return ResponseEntity with SuccessResponseDTO containing the updated OrderResponseDTO
+     * @throws ResourceNotFoundException if the order is not found
+     * @throws InactiveResourceException if the order is inactive
+     */
     @PutMapping("/{id}")
     public ResponseEntity<SuccessResponseDTO<OrderResponseDTO>> updateOrder(
             @PathVariable Long id,

@@ -1,5 +1,13 @@
 package org.technoready.meliecommerce.exception;
 
+/**
+ * Exception thrown when an operation is attempted on an inactive resource.
+ * DATE: 19 - October - 2025
+ *
+ * @author Jorge Armando Avila Carrillo | NAOID: 3310
+ * @version 1.0
+ */
+
 public class InactiveResourceException extends RuntimeException {
 
     private final String resourceName;
