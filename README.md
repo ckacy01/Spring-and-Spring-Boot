@@ -215,10 +215,8 @@ meliecommerce/
 │
 ├── scripts/                      # Deployment and setup scripts
 │   ├── install_and_run.sh       # Complete setup and run
-│   ├── only_install.sh          # Installation only
 │   ├── run_development.sh       # Run with dev profile
-│   ├── run_production.sh        # Run with prod profile
-│   └── run_testing.sh           # Run with test profile
+│   └── run_production.sh        # Run with prod profile
 │
 ├── src/main/
 │   ├── java/org/technoready/meliecommerce/
