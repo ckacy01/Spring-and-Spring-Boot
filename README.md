@@ -79,7 +79,7 @@ This project represents the successful transformation of a problematic system in
 ## Release Notes
 
 ### Version 1.0.0 - Initial Release (October 19, 2025)
-
+> Actual version
 #### New Features
 - ✅ User management endpoints (GET, POST, PUT, DELETE/Soft)
 - ✅ Product catalog management endpoints (GET, POST, PUT, DELETE/Soft)
@@ -87,11 +87,11 @@ This project represents the successful transformation of a problematic system in
 - ✅ Order history tracking by user
 - ✅ Soft delete implementation for data integrity
 - ✅ Product snapshot capturing at order time
-- ✅ Multi-environment YAML configuration
+- ✅ Multi-environment (production and development) YAML configuration
 - ✅ Global exception handling with custom exceptions
-- ✅ Swagger API documentation
 - ✅ JavaDoc code documentation
 - ✅ Bash scripts for easy deployment
+- ✅ Logging (This application generate logs, to debug)
 
 #### Improvements
 - Optimized query performance with Spring Data JPA

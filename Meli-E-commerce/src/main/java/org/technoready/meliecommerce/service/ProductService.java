@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Service class that handles business logic for product operations.
  * Manages product retrieval, creation, updating, and deletion.
- * DATE: 19 - October - 2025
+ * DATE: 18 - October - 2025
  *
  * @author Jorge Armando Avila Carrillo | NAOID: 3310
  * @version 1.0

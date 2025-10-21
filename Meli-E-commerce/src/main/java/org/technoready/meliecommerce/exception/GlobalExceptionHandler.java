@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * Global exception handler that manages all exceptions thrown in REST controllers.
  * Provides consistent error response formatting across the application.
- * DATE: 19 - October - 2025
+ * DATE: 18 - October - 2025
  *
  * @author Jorge Armando Avila Carrillo | NAOID: 3310
  * @version 1.0
