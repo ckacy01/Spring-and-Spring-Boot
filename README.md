@@ -79,7 +79,7 @@ This project represents the successful transformation of a problematic system in
 ## Release Notes
 
 ### Version 1.0.0 - Initial Release (October 19, 2025)
-
+> Actual version
 #### New Features
 - ✅ User management endpoints (GET, POST, PUT, DELETE/Soft)
 - ✅ Product catalog management endpoints (GET, POST, PUT, DELETE/Soft)
