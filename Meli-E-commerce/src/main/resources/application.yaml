@@ -2,7 +2,7 @@ spring:
   application:
     name: Meli-E-commerce
   profiles:
-    active: prod
+    active: dev
 logging:
   level:
     root: INFO
