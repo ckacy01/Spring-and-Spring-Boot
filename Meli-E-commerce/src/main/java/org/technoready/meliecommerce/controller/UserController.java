@@ -1,5 +1,9 @@
 package org.technoready.meliecommerce.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,16 +19,17 @@ import java.util.List;
 /**
  * REST Controller that manages user-related operations.
  * Provides endpoints for retrieving, creating, updating, and deleting users.
- * DATE: 18 - October - 2025
+ * DATE: 22 - October - 2025
  *
  * @author Jorge Armando Avila Carrillo | NAOID: 3310
- * @version 1.0
+ * @version 1.3
  */
 
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "Users", description = "Endpoints for managing users in the system")
 public class UserController {
 
     private final UserService userService;
@@ -35,6 +40,14 @@ public class UserController {
      * @param activeOnly boolean - Flag to retrieve only active users (default: false)
      * @return ResponseEntity with SuccessResponseDTO containing list of Users
      */
+    @Operation(
+            summary = "Get all users",
+            description = "Retrieves all users or only active users if the activeOnly parameter is true."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Users retrieved successfully"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @GetMapping
     public ResponseEntity<SuccessResponseDTO<List<User>>> findAll(
             @RequestParam(required = false, defaultValue = "false") boolean activeOnly) {
@@ -66,6 +79,14 @@ public class UserController {
      * @return ResponseEntity with SuccessResponseDTO containing the User
      * @throws ResourceNotFoundException if the user is not found
      */
+    @Operation(
+            summary = "Get user by ID",
+            description = "Retrieves detailed information about a specific user."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "User retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<SuccessResponseDTO<User>> findById(@PathVariable Long id) {
         log.info("Controller: Received request to get user {}", id);
@@ -88,6 +109,14 @@ public class UserController {
      * @param user User - The user object to be created
      * @return ResponseEntity with SuccessResponseDTO containing the created User
      */
+    @Operation(
+            summary = "Create new user",
+            description = "Creates a new user with the given name, email, and other details."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "User created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data")
+    })
     @PostMapping
     public ResponseEntity<SuccessResponseDTO<User>> save(@RequestBody User user) {
         log.info("Controller: Received request to create user {}", user.getEmail());
@@ -112,6 +141,14 @@ public class UserController {
      * @return ResponseEntity with SuccessResponseDTO indicating successful deactivation
      * @throws ResourceNotFoundException if the user is not found
      */
+    @Operation(
+            summary = "Delete user",
+            description = "Soft deletes (deactivates) a user based on their ID."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "User deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<SuccessResponseDTO<Void>> delete(@PathVariable long id) {
         log.info("Controller: Received request to delete user {}", id);
@@ -135,6 +172,15 @@ public class UserController {
      * @return ResponseEntity with SuccessResponseDTO containing the updated User
      * @throws ResourceNotFoundException if the user is not found
      */
+    @Operation(
+            summary = "Update user",
+            description = "Updates an existing user's information such as name, email, or status."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "User updated successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found"),
+            @ApiResponse(responseCode = "400", description = "Invalid input data")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<SuccessResponseDTO<User>> update(
             @RequestBody User user,
@@ -153,6 +199,5 @@ public class UserController {
         log.info("Controller: User {} updated successfully", id);
         return ResponseEntity.ok(response);
     }
-
 
 }

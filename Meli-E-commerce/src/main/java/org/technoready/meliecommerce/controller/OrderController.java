@@ -1,5 +1,9 @@
 package org.technoready.meliecommerce.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,16 +24,17 @@ import java.util.List;
  * REST Controller that manages order-related operations.
  * Provides endpoints for creating, retrieving, updating, and deleting orders.
  * Handles order processing for users with their associated products.
- * DATE: 18 - October - 2025
+ * DATE: 22 - October - 2025
  *
  * @author Jorge Armando Avila Carrillo | NAOID: 3310
- * @version 1.0
+ * @version 1.3
  */
 
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "Orders", description = "Endpoints for managing customer orders")
 public class OrderController {
 
     private final OrderService orderService;
@@ -41,7 +46,12 @@ public class OrderController {
      * @param detailsRequest List<OrderDetailsDTO> - List of order details containing product ID and quantity
      * @return ResponseEntity with SuccessResponseDTO containing the created OrderResponseDTO
      */
-
+    @Operation(summary = "Create a new order", description = "Creates a new order for a specific user with product details.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Order created successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found"),
+            @ApiResponse(responseCode = "400", description = "Invalid order data")
+    })
     @PostMapping("/{userId}")
     public ResponseEntity<SuccessResponseDTO<OrderResponseDTO>> createOrder(
             @PathVariable Long userId,
@@ -67,6 +77,11 @@ public class OrderController {
      * @param activeOnly boolean - Flag to retrieve only active orders (default: true)
      * @return ResponseEntity with SuccessResponseDTO containing list of OrderResponseDTOs
      */
+    @Operation(summary = "Get all orders", description = "Retrieves all or only active orders based on the activeOnly parameter.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Orders retrieved successfully"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @GetMapping
     public ResponseEntity<SuccessResponseDTO<List<OrderResponseDTO>>> getOrders(
             @RequestParam(required = false, defaultValue = "true") boolean activeOnly) {
@@ -100,13 +115,15 @@ public class OrderController {
      * @param activeOnly boolean - Flag to retrieve only active orders (default: true)
      * @return ResponseEntity with SuccessResponseDTO containing list of OrderResponseDTOs
      */
+    @Operation(summary = "Get orders by user", description = "Retrieves all orders belonging to a specific user.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Orders retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
     @GetMapping("/user/{userId}")
     public ResponseEntity<SuccessResponseDTO<List<OrderResponseDTO>>> getOrdersByUser(
             @PathVariable Long userId,
             @RequestParam(required = false, defaultValue = "true") boolean activeOnly) {
-
-        String message;
-        SuccessResponseDTO<List<OrderResponseDTO>> response;
 
         log.info("Controller: Received request to get orders for user {} (activeOnly: {})", userId, activeOnly);
 
@@ -116,11 +133,13 @@ public class OrderController {
 
         List<OrderResponseDTO> orderDTOs = MapperUtil.toDTOList(orders);
 
-        message = String.format("Retrieved %d orders for user %d successfully", orders.size(), userId);
-        response = SuccessResponseDTO.of(
-                    HttpStatus.OK.value(),
-                    message,
-                    orderDTOs);
+        String message = String.format("Retrieved %d orders for user %d successfully", orders.size(), userId);
+
+        SuccessResponseDTO<List<OrderResponseDTO>> response = SuccessResponseDTO.of(
+                HttpStatus.OK.value(),
+                message,
+                orderDTOs
+        );
 
         log.info("Controller: Retrieved {} orders for user {}", orders.size(), userId);
         return ResponseEntity.ok(response);
@@ -133,6 +152,11 @@ public class OrderController {
      * @return ResponseEntity with SuccessResponseDTO containing the OrderResponseDTO
      * @throws ResourceNotFoundException if the order is not found
      */
+    @Operation(summary = "Get order by ID", description = "Retrieves a specific order by its ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Order retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "Order not found")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<SuccessResponseDTO<OrderResponseDTO>> getOrderById(@PathVariable Long id) {
         log.info("Controller: Received request to get order {}", id);
@@ -162,7 +186,11 @@ public class OrderController {
      * @return ResponseEntity with SuccessResponseDTO indicating successful deactivation
      * @throws ResourceNotFoundException if the order is not found
      */
-
+    @Operation(summary = "Delete an order", description = "Soft deletes (deactivates) an order by its ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Order deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Order not found")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<SuccessResponseDTO<Void>> deleteOrder(@PathVariable Long id) {
         log.info("Controller: Received request to delete order {}", id);
@@ -187,6 +215,12 @@ public class OrderController {
      * @throws ResourceNotFoundException if the order is not found
      * @throws InactiveResourceException if the order is inactive
      */
+    @Operation(summary = "Update an order", description = "Updates an existing order with new product details.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Order updated successfully"),
+            @ApiResponse(responseCode = "404", description = "Order not found"),
+            @ApiResponse(responseCode = "400", description = "Invalid update request")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<SuccessResponseDTO<OrderResponseDTO>> updateOrder(
             @PathVariable Long id,
