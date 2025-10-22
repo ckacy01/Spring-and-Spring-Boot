@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * REST Controller that manages user-related operations.
  * Provides endpoints for retrieving, creating, updating, and deleting users.
- * DATE: 19 - October - 2025
+ * DATE: 18 - October - 2025
  *
  * @author Jorge Armando Avila Carrillo | NAOID: 3310
  * @version 1.0

@@ -2,7 +2,7 @@ package org.technoready.meliecommerce.exception;
 
 /**
  * Exception thrown when a requested resource is not found in the database.
- * DATE: 19 - October - 2025
+ * DATE: 18 - October - 2025
  *
  * @author Jorge Armando Avila Carrillo | NAOID: 3310
  * @version 1.0

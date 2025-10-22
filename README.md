@@ -78,26 +78,11 @@ This project represents the successful transformation of a problematic system in
 
 ## Release Notes
 
-### Version 1.0.0 - Initial Release (October 19, 2025)
-
+### Version 1.1.0 - Environment Profiles (October 21, 2025)
+> Actual version
 #### New Features
-- ✅ User management endpoints (GET, POST, PUT, DELETE/Soft)
-- ✅ Product catalog management endpoints (GET, POST, PUT, DELETE/Soft)
-- ✅ Order creation and processing with order details
-- ✅ Order history tracking by user
-- ✅ Soft delete implementation for data integrity
-- ✅ Product snapshot capturing at order time
-- ✅ Multi-environment YAML configuration
-- ✅ Global exception handling with custom exceptions
-- ✅ Swagger API documentation
-- ✅ JavaDoc code documentation
-- ✅ Bash scripts for easy deployment
-
-#### Improvements
-- Optimized query performance with Spring Data JPA
-- Enhanced logging throughout the application
-- Comprehensive error messages and status codes
-- Standardized API response format (SuccessResponseDTO, ErrorResponseDTO)
+- Environment profiles added: Introduced separate profiles for development, testing (using H2), and production (using PostgreSQL) to improve configuration management and deployment flexibility.
+- Environment variable management: Added support for .env files to securely manage and isolate environment-specific variables.
 
 #### Technical Stack
 - Spring Boot 3.5.2+

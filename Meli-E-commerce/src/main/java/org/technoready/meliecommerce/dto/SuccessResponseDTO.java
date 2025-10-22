@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 /**
  * DTO for success messages
- * DATE: 19 - October - 2025
+ * DATE: 18 - October - 2025
  *
  * @author Jorge Armando Avila Carrillo | NAOID: 3310
  * @version 1.0
