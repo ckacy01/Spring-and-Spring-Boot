@@ -78,7 +78,7 @@ This project represents the successful transformation of a problematic system in
 
 ## Release Notes
 
-## Version 1.3.0 - Testing Automation (October 23, 2025)
+## Version 1.2.0 - Testing Automation (October 23, 2025)
 > Current version
 #### New Features
 - Automated test execution with AutoTestRunner
@@ -87,6 +87,7 @@ This project represents the successful transformation of a problematic system in
 - Test profile with H2 in-memory database
 - Automatic test discovery and execution on application startup
 - Creating a data.sql file to replace DataInitializer
+- Adding Swagger documentation
 
 #### Improvements
 - Enhanced testing workflow with Maven profiles
