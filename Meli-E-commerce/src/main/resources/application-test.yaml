@@ -1,7 +1,7 @@
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: test
 
   datasource:
     url: jdbc:h2:mem:ecommerce_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -17,7 +17,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
@@ -25,13 +25,23 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true
 
+  sql:
+    init:
+      mode: always
+
 server:
   port: 8080
 
 logging:
   level:
-    root: DEBUG
-    org.technoready.meliecommerce: DEBUG
-    org.springframework.web: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    root: INFO
+    org.technoready.meliecommerce: INFO
+    org.springframework.web: WARN
+    org.hibernate.SQL: WARN
+    org.junit: INFO
+
+
+auto-test:
+  enabled: true
+  packages: org.technoready.meliecommerce.integration,org.technoready.meliecommerce.service_unit
+  exit-after-tests: false
