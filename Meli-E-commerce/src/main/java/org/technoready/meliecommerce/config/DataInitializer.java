@@ -11,14 +11,15 @@ import org.technoready.meliecommerce.repository.UserRepository;
 
 import java.util.List;
 /**
+ * Changing this class for using only data.sql for dev and testing profiles
+ * I mantain this because if is needed in the future
+ *
  * Configuration class responsible for initializing database with default data.
  * Automatically creates sample products and users on application startup if the database is empty.
  * DATE: 18 - October - 2025
  *
  * @author Jorge Armando Avila Carrillo | NAOID: 3310
  * @version 1.0
- */
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -53,4 +54,4 @@ public class DataInitializer {
         }
     }
 }
-
+*/

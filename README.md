@@ -78,26 +78,21 @@ This project represents the successful transformation of a problematic system in
 
 ## Release Notes
 
-### Version 1.0.0 - Initial Release (October 19, 2025)
-> Actual version
+## Version 1.2.0 - Testing Automation (October 23, 2025)
+> Current version
 #### New Features
-- ✅ User management endpoints (GET, POST, PUT, DELETE/Soft)
-- ✅ Product catalog management endpoints (GET, POST, PUT, DELETE/Soft)
-- ✅ Order creation and processing with order details
-- ✅ Order history tracking by user
-- ✅ Soft delete implementation for data integrity
-- ✅ Product snapshot capturing at order time
-- ✅ Multi-environment (production and development) YAML configuration
-- ✅ Global exception handling with custom exceptions
-- ✅ JavaDoc code documentation
-- ✅ Bash scripts for easy deployment
-- ✅ Logging (This application generate logs, to debug)
+- Automated test execution with AutoTestRunner
+- JUnit 5 integration tests for controllers
+- Unit tests for service layer
+- Test profile with H2 in-memory database
+- Automatic test discovery and execution on application startup
+- Creating a data.sql file to replace DataInitializer
+- Adding Swagger documentation
 
 #### Improvements
-- Optimized query performance with Spring Data JPA
-- Enhanced logging throughout the application
-- Comprehensive error messages and status codes
-- Standardized API response format (SuccessResponseDTO, ErrorResponseDTO)
+- Enhanced testing workflow with Maven profiles
+- Comprehensive test coverage for integration and unit tests
+- Improved development experience with automated testing
 
 #### Technical Stack
 - Spring Boot 3.5.2+
@@ -238,6 +233,8 @@ meliecommerce/
 │
 ├── src/test/
 │   └── java/org/technoready/meliecommerce/
+│       ├── integration             # Integration tests for each controller
+│       ├── service_unit            # Unit tests for each service
 │       └── MeliEcommerceApplicationTests.java
 │
 ├── pom.xml                      # Maven configuration
@@ -386,6 +383,38 @@ mvn javadoc:javadoc
 
 ## Testing
 
+### Automated Test Execution
+
+The application includes an AutoTestRunner that automatically executes all tests when started with the test profile.
+
+**Run with automated tests:**
+```bash
+mvn clean test-compile exec:java -Ptest
+```
+
+**Expected output:**
+```bash
+========================================
+AUTO TEST RUNNER ACTIVATED
+========================================
+Test packages: [org.technoready.meliecommerce.integration, org.technoready.meliecommerce.service_unit]
+Exit after tests: false
+
+Executing tests...
+
+========================================
+TESTS SUMMARY
+========================================
+Tests found:     64
+Tests executed:  64
+Tests succeeded: 64
+Tests failed:    0
+Tests skipped:   0
+Duration:        1234 ms
+========================================
+Application will continue running
+```
+
 ### API Testing with Postman
 
 1. Open Postman
@@ -399,7 +428,11 @@ Test coverage areas:
 - Order creation and updates
 - Soft delete functionality
 - Error handling scenarios
-- Edge cases and validations
+- Edge cases and validation
+
+## Swagger
+You can find swagger documentation following this link after running the app:
+http://localhost:8080/swagger-ui/index.html 
 
 ##  License
 
@@ -413,11 +446,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Roadmap
 
-- [ ] Add JUNIT 5 testing
-- [ ] Add Testing environment
-- [ ] Integrate Swagger/OpenAPI into project
-- [ ] Configure Swagger UI for interactive testing
-- [ ] Develop tests for different scenarios ( success, edge cases. failure)
+- [x] Add JUNIT 5 testing
+- [x] Add Testing environment
+- [x] Integrate Swagger/OpenAPI into project
+- [x] Configure Swagger UI for interactive testing
+- [x] Develop tests for different scenarios ( success, edge cases. failure)
 
 ## Changelog
 

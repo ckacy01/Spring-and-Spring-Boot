@@ -1,5 +1,12 @@
 package org.technoready.meliecommerce.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,29 +22,40 @@ import java.util.List;
 /**
  * REST Controller that manages product-related operations.
  * Provides endpoints for retrieving, creating, updating, and deleting products.
- * DATE: 18 - October - 2025
+ * <p>
+ * DATE: 22 - October - 2025
  *
- * @author Jorge Armando Avila Carrillo | NAOID: 3310
- * @version 1.0
+ * @author
+ * Jorge Armando Avila Carrillo | NAOID: 3310
+ * @version 1.3
  */
-
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "Product Management", description = "Endpoints for managing products in the e-commerce platform")
 public class ProductController {
 
     private final ProductService productService;
 
     /**
-     * Retrieves all products or only active products based on the activeOnly parameter.
+     * Retrieves all products or only active products based on the {@code activeOnly} parameter.
      *
      * @param activeOnly boolean - Flag to retrieve only active products (default: true)
-     * @return ResponseEntity with SuccessResponseDTO containing list of Products
+     * @return ResponseEntity with SuccessResponseDTO containing a list of Products
      */
-
+    @Operation(
+            summary = "Retrieve all products",
+            description = "Fetches a list of all products. Optionally filters by active products only."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Products retrieved successfully",
+                    content = @Content(schema = @Schema(implementation = SuccessResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+    })
     @GetMapping
     public ResponseEntity<SuccessResponseDTO<List<Product>>> findAll(
+            @Parameter(description = "Flag to retrieve only active products", example = "true")
             @RequestParam(required = false, defaultValue = "true") boolean activeOnly) {
 
         log.info("Controller: Received request to get all products (activeOnly: {})", activeOnly);
@@ -67,10 +85,21 @@ public class ProductController {
      * @return ResponseEntity with SuccessResponseDTO containing the Product
      * @throws ResourceNotFoundException if the product is not found
      */
+    @Operation(
+            summary = "Retrieve a product by ID",
+            description = "Fetches the details of a single product using its ID."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product retrieved successfully",
+                    content = @Content(schema = @Schema(implementation = SuccessResponseDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Product not found", content = @Content)
+    })
     @GetMapping("/{id}")
-    public ResponseEntity<SuccessResponseDTO<Product>> findById(@PathVariable long id) {
-        log.info("Controller: Received request to get product {}", id);
+    public ResponseEntity<SuccessResponseDTO<Product>> findById(
+            @Parameter(description = "ID of the product to retrieve", example = "1")
+            @PathVariable long id) {
 
+        log.info("Controller: Received request to get product {}", id);
         Product product = productService.findById(id);
 
         SuccessResponseDTO<Product> response = SuccessResponseDTO.of(
@@ -90,8 +119,20 @@ public class ProductController {
      * @return ResponseEntity with SuccessResponseDTO indicating successful deactivation
      * @throws ResourceNotFoundException if the product is not found
      */
+    @Operation(
+            summary = "Soft delete a product",
+            description = "Deactivates a product by setting its active flag to false."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product deactivated successfully",
+                    content = @Content(schema = @Schema(implementation = SuccessResponseDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Product not found", content = @Content)
+    })
     @DeleteMapping("/{id}")
-    public ResponseEntity<SuccessResponseDTO<Void>> delete(@PathVariable Long id) {
+    public ResponseEntity<SuccessResponseDTO<Void>> delete(
+            @Parameter(description = "ID of the product to delete", example = "1")
+            @PathVariable Long id) {
+
         log.info("Controller: Received request to delete product {}", id);
 
         productService.delete(id);
@@ -111,8 +152,23 @@ public class ProductController {
      * @param product Product - The product object to be created
      * @return ResponseEntity with SuccessResponseDTO containing the created Product
      */
+    @Operation(
+            summary = "Create a new product",
+            description = "Creates a new product using the provided JSON body."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Product created successfully",
+                    content = @Content(schema = @Schema(implementation = SuccessResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input data", content = @Content)
+    })
     @PostMapping
-    public ResponseEntity<SuccessResponseDTO<Product>> save(@RequestBody Product product) {
+    public ResponseEntity<SuccessResponseDTO<Product>> save(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Product details for creation",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = Product.class)))
+            @RequestBody Product product) {
+
         log.info("Controller: Received request to create product {}", product.getName());
 
         Product savedProduct = productService.save(product);
@@ -136,9 +192,23 @@ public class ProductController {
      * @return ResponseEntity with SuccessResponseDTO containing the updated Product
      * @throws ResourceNotFoundException if the product is not found
      */
+    @Operation(
+            summary = "Update an existing product",
+            description = "Updates a product's information using its ID and the provided details."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product updated successfully",
+                    content = @Content(schema = @Schema(implementation = SuccessResponseDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Product not found", content = @Content)
+    })
     @PutMapping("/{id}")
     public ResponseEntity<SuccessResponseDTO<Product>> update(
+            @Parameter(description = "ID of the product to update", example = "1")
             @PathVariable Long id,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Updated product data",
+                    required = true,
+                    content = @Content(schema = @Schema(implementation = Product.class)))
             @RequestBody Product product) {
 
         log.info("Controller: Received request to update product {}", id);
@@ -154,5 +224,4 @@ public class ProductController {
         log.info("Controller: Product {} updated successfully", id);
         return ResponseEntity.ok(response);
     }
-
 }
